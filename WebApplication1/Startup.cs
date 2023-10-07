@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
-using ShopApi.Extensions;
+using WebApplication1.Extensions;
 
-namespace ShopApi;
+namespace WebApplication1;
 
 public class Startup
 {

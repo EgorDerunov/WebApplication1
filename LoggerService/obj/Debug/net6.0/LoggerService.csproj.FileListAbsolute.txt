@@ -1,0 +1,15 @@
+F:\WebApplication1\LoggerService\bin\Debug\net6.0\LoggerService.deps.json
+F:\WebApplication1\LoggerService\bin\Debug\net6.0\LoggerService.dll
+F:\WebApplication1\LoggerService\bin\Debug\net6.0\LoggerService.pdb
+F:\WebApplication1\LoggerService\bin\Debug\net6.0\Contracts.dll
+F:\WebApplication1\LoggerService\bin\Debug\net6.0\Contracts.pdb
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\LoggerService.csproj.AssemblyReference.cache
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\LoggerService.GeneratedMSBuildEditorConfig.editorconfig
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\LoggerService.AssemblyInfoInputs.cache
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\LoggerService.AssemblyInfo.cs
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\LoggerService.csproj.CoreCompileInputs.cache
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\LoggerService.csproj.CopyComplete
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\LoggerService.dll
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\refint\LoggerService.dll
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\LoggerService.pdb
+F:\WebApplication1\LoggerService\obj\Debug\net6.0\ref\LoggerService.dll

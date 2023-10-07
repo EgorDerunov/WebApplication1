@@ -30,3 +30,11 @@ F:\WebApplication1\WebApplication1\obj\Debug\net6.0\refint\WebApplication1.dll
 F:\WebApplication1\WebApplication1\obj\Debug\net6.0\WebApplication1.pdb
 F:\WebApplication1\WebApplication1\obj\Debug\net6.0\WebApplication1.genruntimeconfig.cache
 F:\WebApplication1\WebApplication1\obj\Debug\net6.0\ref\WebApplication1.dll
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\nlog.config
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\appsettings.Production.json
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\NLog.dll
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\NLog.Extensions.Logging.dll
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\Contracts.dll
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\LoggerService.dll
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\LoggerService.pdb
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\Contracts.pdb

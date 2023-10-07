@@ -1,6 +1,6 @@
 using NLog;
 
-namespace ShopApi;
+namespace WebApplication1;
 
 public class Program
 {
