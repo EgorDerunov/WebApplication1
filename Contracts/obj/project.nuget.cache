@@ -1,8 +1,28 @@
 {
   "version": 2,
-  "dgSpecHash": "Lxl2/uV/yspPFboCJJZdbPMpfijOt0W2Ks6jRyh78KKGfIV3n5E6lE4d1kdMz9+0mW9Glmg669Yd761NMYNY5A==",
+  "dgSpecHash": "MeuhRpkzwMBT8YyrPJUH41LFZ6sBlXqRSQAhOtiL/cZpoPfvSH41eNtCczg2yyeEChD/yhU0f0bMR6bVAiChqA==",
   "success": true,
   "projectFilePath": "F:\\WebApplication1\\Contracts\\Contracts.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.23\\microsoft.aspnetcore.cryptography.internal.6.0.23.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\6.0.23\\microsoft.aspnetcore.cryptography.keyderivation.6.0.23.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\6.0.23\\microsoft.aspnetcore.identity.entityframeworkcore.6.0.23.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.12\\microsoft.entityframeworkcore.7.0.12.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.12\\microsoft.entityframeworkcore.abstractions.7.0.12.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.12\\microsoft.entityframeworkcore.analyzers.7.0.12.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\6.0.23\\microsoft.entityframeworkcore.relational.6.0.23.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\6.0.0\\microsoft.extensions.configuration.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.identity.core\\6.0.23\\microsoft.extensions.identity.core.6.0.23.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.identity.stores\\6.0.23\\microsoft.extensions.identity.stores.6.0.23.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.logging\\7.0.0\\microsoft.extensions.logging.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0\\microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.options\\7.0.0\\microsoft.extensions.options.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

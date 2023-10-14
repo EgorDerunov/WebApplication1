@@ -9,3 +9,7 @@ F:\WebApplication1\Contracts\obj\Debug\net6.0\Contracts.dll
 F:\WebApplication1\Contracts\obj\Debug\net6.0\refint\Contracts.dll
 F:\WebApplication1\Contracts\obj\Debug\net6.0\Contracts.pdb
 F:\WebApplication1\Contracts\obj\Debug\net6.0\ref\Contracts.dll
+F:\WebApplication1\Contracts\bin\Debug\net6.0\Entities.dll
+F:\WebApplication1\Contracts\bin\Debug\net6.0\Entities.pdb
+F:\WebApplication1\Contracts\obj\Debug\net6.0\Contracts.csproj.AssemblyReference.cache
+F:\WebApplication1\Contracts\obj\Debug\net6.0\Contracts.csproj.CopyComplete
