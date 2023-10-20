@@ -7,5 +7,7 @@ namespace Contracts
         public void CompanyMethod();
 
         IEnumerable<Company> GetAllCompanies(bool trackChanges);
+
+        Company GetCompany(Guid companyId, bool trackChanges);
     }
 }

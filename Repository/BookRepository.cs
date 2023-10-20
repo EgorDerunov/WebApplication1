@@ -14,5 +14,17 @@ namespace Repository
         {
             
         }
+
+        public Book GetBook(Guid authorId, Guid id, bool trackChanges)
+        {
+            return FindByCondition(
+                e => e.AuthorId.Equals(authorId) && e.Id.Equals(id), trackChanges)
+                .SingleOrDefault();
+        }
+
+        public IEnumerable<Book> GetBooks(Guid authorId, bool trackChanges)
+        {
+            return FindByCondition(e => e.AuthorId.Equals(authorId), trackChanges).OrderBy(e => e.Name);
+        }
     }
 }

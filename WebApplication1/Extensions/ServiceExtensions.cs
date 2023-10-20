@@ -2,7 +2,9 @@
 using Entities;
 using LoggerService;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Repository;
+using WebApplication1.Formatter;
 
 namespace WebApplication1.Extensions
 {
@@ -38,5 +40,9 @@ namespace WebApplication1.Extensions
             services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
 
+        public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder)
+        {
+            return builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatterCompany()));
+        }
     }
 }

@@ -26,5 +26,21 @@ namespace WebApplication1.Controllers
             var authorsDto = _mapper.Map<IEnumerable<AuthorDto>>(authors);
             return Ok(authorsDto);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetAuthor(Guid id)
+        {
+            var author = _repository.Author.GetAuthor(id, trackChanges: false);
+            if (author == null)
+            {
+                _logger.LogInfo($"Author with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+            else
+            {
+                var authorDto = _mapper.Map<AuthorDto>(author);
+                return Ok(authorDto);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using System.ComponentModel.Design;
 
 namespace Repository
 {
@@ -19,5 +20,9 @@ namespace Repository
         {
             return FindAll(trackChanges).OrderBy(c => c.Name).ToList();
         }
-    }
+
+        public Author GetAuthor(Guid authorId, bool trackChanges)
+        {
+            return FindByCondition(c => c.Id.Equals(authorId), trackChanges).SingleOrDefault();
+        }
 }

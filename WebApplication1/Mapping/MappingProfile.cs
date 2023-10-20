@@ -15,6 +15,9 @@ namespace WebApplication1.Mapping
             CreateMap<Author, AuthorDto>()
                 .ForMember(c => c.FullName,
                 opt => opt.MapFrom(x => string.Join(' ', x.Name, x.Surname)));
+
+            CreateMap<Employee, EmployeeDto>();
+            CreateMap<Book, BookDto>();
         }
     }
 }
