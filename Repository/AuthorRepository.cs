@@ -14,5 +14,10 @@ namespace Repository
         {
             
         }
+
+        public IEnumerable<Author> GetAllAuthors(bool trackChanges)
+        {
+            return FindAll(trackChanges).OrderBy(c => c.Name).ToList();
+        }
     }
 }

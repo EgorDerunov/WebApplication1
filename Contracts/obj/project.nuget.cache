@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MeuhRpkzwMBT8YyrPJUH41LFZ6sBlXqRSQAhOtiL/cZpoPfvSH41eNtCczg2yyeEChD/yhU0f0bMR6bVAiChqA==",
+  "dgSpecHash": "77OrnfzQMAIQmfJfNuMtfbFPFp7B7m7WqrUeKV3f3Q3Njm+CBmXzPoIrxM806ZApI01o1iULTrUSLHAO9QJwIA==",
   "success": true,
   "projectFilePath": "F:\\WebApplication1\\Contracts\\Contracts.csproj",
   "expectedPackageFiles": [
@@ -22,6 +22,7 @@
     "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0\\microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.options\\7.0.0\\microsoft.extensions.options.7.0.0.nupkg.sha512",
     "C:\\Users\\life_\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "C:\\Users\\life_\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\life_\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
   ],
   "logs": []
