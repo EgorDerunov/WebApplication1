@@ -13,7 +13,7 @@ namespace Repository
 
         public void AuthorMethod()
         {
-            
+
         }
 
         public IEnumerable<Author> GetAllAuthors(bool trackChanges)
@@ -25,4 +25,5 @@ namespace Repository
         {
             return FindByCondition(c => c.Id.Equals(authorId), trackChanges).SingleOrDefault();
         }
+    }
 }
