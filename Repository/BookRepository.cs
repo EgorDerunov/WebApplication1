@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using System.ComponentModel.Design;
 
 namespace Repository
 {
@@ -13,6 +14,12 @@ namespace Repository
         public void BookMethod()
         {
             
+        }
+
+        public void CreateBookForAuthor(Guid authorId, Book book)
+        {
+            book.AuthorId = authorId;
+            Create(book);
         }
 
         public Book GetBook(Guid authorId, Guid id, bool trackChanges)

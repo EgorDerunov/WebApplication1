@@ -10,6 +10,12 @@ namespace Repository
         {
         }
 
+        public void CreateEmployeeForCompany(Guid companyId, Employee employee)
+        {
+            employee.CompanyId = companyId;
+            Create(employee);
+        }
+
         public void EmployeeMethod()
         {
             
