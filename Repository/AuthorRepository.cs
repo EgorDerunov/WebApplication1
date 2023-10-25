@@ -21,6 +21,11 @@ namespace Repository
             Create(author);
         }
 
+        public void DeleteAuthor(Author author)
+        {
+            Delete(author);
+        }
+
         public IEnumerable<Author> GetAllAuthors(bool trackChanges)
         {
             return FindAll(trackChanges).OrderBy(c => c.Name).ToList();

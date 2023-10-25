@@ -106,3 +106,4 @@ F:\WebApplication1\WebApplication1\bin\Debug\net6.0\Repository.pdb
 F:\WebApplication1\WebApplication1\bin\Debug\net6.0\AutoMapper.dll
 F:\WebApplication1\WebApplication1\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 F:\WebApplication1\WebApplication1\bin\Debug\net6.0\Newtonsoft.Json.dll
+F:\WebApplication1\WebApplication1\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll

@@ -2,11 +2,12 @@
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/companies/{companyId}/employees")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
@@ -89,6 +90,99 @@ namespace WebApplication1.Controllers
                 companyId,
                 id = employeeToReturn.Id
             }, employeeToReturn);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteEmloyeeForCompany(Guid companyId, Guid id)
+        {
+            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+
+            if (company == null)
+            {
+                loggerManager.LogInfo("$\"Company with id: {companyId} doesn't exist in the\r\ndatabase.\"");
+                return NotFound();
+            }
+
+            var employeeForComapny = repositoryManager.Employee.GetEmployee(companyId, id, trackChanges: false);
+
+            if (employeeForComapny == null)
+            {
+                loggerManager.LogInfo($"Employee with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            repositoryManager.Employee.DeleteEmployee(employeeForComapny);
+            repositoryManager.Save();
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
+        {
+            if (employee == null)
+            {
+                loggerManager.LogError("EmployeeForUpdateDto object sent from client is null.");
+                return BadRequest("EmployeeForUpdateDto object is null");
+            }
+
+            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+
+            if (company == null)
+            {
+                loggerManager.LogInfo($"Company with id: {companyId} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            var employeeEntity = repositoryManager.Employee.GetEmployee(companyId, id, trackChanges: true);
+
+            if (employeeEntity == null)
+            {
+                loggerManager.LogInfo($"Employee with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            mapper.Map(employee, employeeEntity);
+            repositoryManager.Save();
+            return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult PartiallyUpdateEmployeeForCompany(
+            Guid companyId,
+            Guid id,
+            [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
+        {
+
+            if (patchDoc == null)
+            {
+                loggerManager.LogError("patchDoc object sent from client is null.");
+                return BadRequest("patchDoc object is null");
+            }
+
+            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+
+            if (company == null)
+            {
+                loggerManager.LogInfo($"Company with id: {companyId} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            var employeeEntity = repositoryManager.Employee.GetEmployee(companyId, id, trackChanges: true);
+
+            if (employeeEntity == null)
+            {
+                loggerManager.LogInfo($"Employee with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            var employeeToPatch = mapper.Map<EmployeeForUpdateDto>(employeeEntity);
+
+            patchDoc.ApplyTo(employeeToPatch);
+            mapper.Map(employeeToPatch, employeeEntity);
+
+            repositoryManager.Save();
+
+            return NoContent();
         }
     }
 }

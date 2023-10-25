@@ -3,11 +3,12 @@ using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/authors/{authorId}/books")]
     [ApiController]
     public class BookController : ControllerBase
     {
@@ -90,6 +91,99 @@ namespace WebApplication1.Controllers
                 authorId,
                 id = bookToReturn.Id
             }, bookToReturn);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBookForAuthor(Guid authorId, Guid id)
+        {
+            var author = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+
+            if (author == null)
+            {
+                loggerManager.LogInfo("$\"Author with id: {authorId} doesn't exist in the\r\ndatabase.\"");
+                return NotFound();
+            }
+
+            var bookForAuthor = repositoryManager.Book.GetBook(authorId, id, trackChanges: false);
+
+            if (bookForAuthor == null)
+            {
+                loggerManager.LogInfo($"Book with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            repositoryManager.Book.DeleteBook(bookForAuthor);
+            repositoryManager.Save();
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateBookForAuthor(Guid authorId, Guid id, [FromBody] BookForUpdateDto book)
+        {
+            if (book == null)
+            {
+                loggerManager.LogError("BookForUpdateDto object sent from client is null.");
+                return BadRequest("BookForUpdateDto object is null");
+            }
+
+            var author = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+
+            if (author == null)
+            {
+                loggerManager.LogInfo($"Author with id: {authorId} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            var bookEntity = repositoryManager.Book.GetBook(authorId, id, trackChanges: true);
+
+            if (bookEntity == null)
+            {
+                loggerManager.LogInfo($"Book with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            mapper.Map(book, bookEntity);
+            repositoryManager.Save();
+            return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult PartiallyUpdateBookForAuthor(
+            Guid authorId,
+            Guid id,
+            [FromBody] JsonPatchDocument<BookForUpdateDto> patchDoc)
+        {
+
+            if (patchDoc == null)
+            {
+                loggerManager.LogError("patchDoc object sent from client is null.");
+                return BadRequest("patchDoc object is null");
+            }
+
+            var author = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+
+            if (author == null)
+            {
+                loggerManager.LogInfo($"Author with id: {authorId} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            var bookEntity = repositoryManager.Book.GetBook(authorId, id, trackChanges: true);
+
+            if (bookEntity == null)
+            {
+                loggerManager.LogInfo($"Book with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            var bookToPatch = mapper.Map<BookForUpdateDto>(bookEntity);
+
+            patchDoc.ApplyTo(bookToPatch);
+            mapper.Map(bookToPatch, bookEntity);
+
+            repositoryManager.Save();
+
+            return NoContent();
         }
     }
 }

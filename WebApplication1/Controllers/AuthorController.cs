@@ -108,5 +108,44 @@ namespace WebApplication1.Controllers
 
             return CreatedAtRoute("AuthorCollection", new { ids }, authorCollectionToReturn);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteAuthor(Guid id)
+        {
+            var author = _repository.Author.GetAuthor(id, trackChanges: false);
+
+            if (author == null)
+            {
+                _logger.LogInfo($"Author with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            _repository.Author.DeleteAuthor(author);
+            _repository.Save();
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateAuthor(Guid id, [FromBody] AuthorForUpdateDto author)
+        {
+            if (author == null)
+            {
+                _logger.LogError("AuthorForUpdateDto object sent from client is null.");
+                return BadRequest("AuthorForUpdateDto object is null");
+            }
+
+            var authorEntity = _repository.Author.GetAuthor(id, trackChanges: true);
+
+            if (authorEntity == null)
+            {
+                _logger.LogInfo($"Author with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            _mapper.Map(author, authorEntity);
+            _repository.Save();
+
+            return NoContent();
+        }
     }
 }

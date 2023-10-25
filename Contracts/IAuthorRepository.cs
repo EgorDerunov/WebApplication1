@@ -13,5 +13,8 @@ namespace Contracts
         void CreateAuthor(Author author);
 
         IEnumerable<Author> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+
+        void DeleteAuthor(Author author);
+
     }
 }

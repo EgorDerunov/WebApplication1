@@ -11,5 +11,7 @@ namespace Contracts
         Book GetBook(Guid authorId, Guid id, bool trackChanges);
 
         void CreateBookForAuthor(Guid authorId, Book book);
+
+        void DeleteBook(Book book);
     }
 }

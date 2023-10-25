@@ -23,6 +23,11 @@ namespace WebApplication1.Mapping
             CreateMap<EmployeeForCreationDto, Employee>();
             CreateMap<AuthorForCreationDto, Author>();
             CreateMap<BookForCreationDto, Book>();
+
+            CreateMap<CompanyForUpdateDto, Company>();
+            CreateMap<EmployeeForUpdateDto, Employee>();
+            CreateMap<AuthorForUpdateDto, Author>();
+            CreateMap<BookForUpdateDto, Book>();
         }
     }
 }

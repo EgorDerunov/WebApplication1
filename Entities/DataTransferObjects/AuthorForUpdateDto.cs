@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Entities.DataTransferObjects
 {
-    public class AuthorForCreationDto
+    public class AuthorForUpdateDto
     {
         public string Name { get; set; }
         public string Surname { get; set; }
         public string DateBirth { get; set; }
-        public IEnumerable<BookForCreationDto>? Books { get; set; }
+        public IEnumerable<BookForUpdateDto>? Books { get; set; }
     }
 }

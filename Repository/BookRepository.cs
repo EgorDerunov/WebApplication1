@@ -22,6 +22,11 @@ namespace Repository
             Create(book);
         }
 
+        public void DeleteBook(Book book)
+        {
+            Delete(book);
+        }
+
         public Book GetBook(Guid authorId, Guid id, bool trackChanges)
         {
             return FindByCondition(
