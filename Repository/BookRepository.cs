@@ -3,6 +3,7 @@ using Entities;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using System.ComponentModel.Design;
 
 namespace Repository
@@ -42,7 +43,9 @@ namespace Repository
                 e.AuthorId.Equals(authorId) &&
                 (e.YearIssue >= bookParameters.MinYear &&
                 e.YearIssue <= bookParameters.MaxYear), trackChanges)
-                    .OrderBy(e => e.Name)
+                    .FilterEmployees(bookParameters.MinYear, bookParameters.MaxYear)
+                    .Search(bookParameters.SearchTerm)
+                    .Sort(bookParameters.OrderBy)
                     .ToListAsync();
 
             return PagedList<Book>.ToPagedList(books, bookParameters.PageNumber, bookParameters.PageSize);

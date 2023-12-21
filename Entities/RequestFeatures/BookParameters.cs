@@ -11,5 +11,6 @@ namespace Entities.RequestFeatures
         public uint MinYear { get; set; }
         public uint MaxYear { get; set; } = 2023;
         public bool ValidYearRange => MaxYear > MinYear;
+        public string SearchTerm { get; set; }
     }
 }

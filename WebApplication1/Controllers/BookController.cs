@@ -20,12 +20,14 @@ namespace WebApplication1.Controllers
         private readonly IRepositoryManager repositoryManager;
         private readonly ILoggerManager loggerManager;
         private readonly IMapper mapper;
+        private readonly IDataShaper<BookDto> dataShaper;
 
-        public BookController(IRepositoryManager _repositoryManager, ILoggerManager _loggerManager, IMapper _mapper)
+        public BookController(IRepositoryManager _repositoryManager, ILoggerManager _loggerManager, IMapper _mapper, IDataShaper<BookDto> _dataShaper)
         {
             repositoryManager = _repositoryManager;
             loggerManager = _loggerManager;
             mapper = _mapper;
+            dataShaper = _dataShaper;
         }
 
         [HttpGet]
@@ -49,7 +51,8 @@ namespace WebApplication1.Controllers
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(booksFromDb.MetaData));
 
             var booksDto = mapper.Map<IEnumerable<BookDto>>(booksFromDb);
-            return Ok(booksDto);
+
+            return Ok(dataShaper.ShapeData(booksDto, bookParametrs.Fields));
         }
 
         [HttpGet("{id}", Name = "GeBookForAuthor")]

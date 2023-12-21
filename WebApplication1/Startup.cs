@@ -1,8 +1,11 @@
 using Contracts;
+using Entities.DataTransferObjects.Book;
+using Entities.DataTransferObjects.Employee;
 using LoggerService;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
+using Repository.DataShaping;
 using WebApplication1.ActionFilter;
 using WebApplication1.Extensions;
 
@@ -38,6 +41,8 @@ public class Startup
         services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
         services.AddScoped<ValidateAuthorExistsAttribute>();
         services.AddScoped<ValidateBookForAuthorExistsAttribute>();
+        services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+        services.AddScoped<IDataShaper<BookDto>, DataShaper<BookDto>>();
         services.AddAutoMapper(typeof(Startup));
         services.AddControllers();
         services.AddEndpointsApiExplorer();

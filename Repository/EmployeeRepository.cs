@@ -3,6 +3,7 @@ using Entities;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 
 namespace Repository
 {
@@ -25,7 +26,7 @@ namespace Repository
 
         public void EmployeeMethod()
         {
-            
+
         }
 
         public async Task<Employee> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges)
@@ -41,8 +42,10 @@ namespace Repository
              e.CompanyId.Equals(companyId) &&
              (e.Age >= employeeParameters.MinAge &&
              e.Age <= employeeParameters.MaxAge), trackChanges)
-                 .OrderBy(e => e.Name)
-                 .ToListAsync();
+                .FilterEmployees(employeeParameters.MinAge, employeeParameters.MaxAge)
+                .Search(employeeParameters.SearchTerm)
+                .Sort(employeeParameters.OrderBy)
+                .ToListAsync();
 
             return PagedList<Employee>.ToPagedList(employees, employeeParameters.PageNumber, employeeParameters.PageSize);
         }
