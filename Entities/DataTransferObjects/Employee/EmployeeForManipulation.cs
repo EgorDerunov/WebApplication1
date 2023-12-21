@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.DataTransferObjects
+namespace Entities.DataTransferObjects.Employee
 {
-    public class EmployeeForCreationDto
+    public class EmployeeForManipulation
     {
         public string Name { get; set; }
         public int Age { get; set; }

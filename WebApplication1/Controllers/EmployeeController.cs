@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities.DataTransferObjects;
+using Entities.DataTransferObjects.Employee;
 using Entities.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +23,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEmployeesForCompany(Guid companyId)
+        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId)
         {
-            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+            var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges: false);
 
             if (company == null)
             {
@@ -33,15 +33,15 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var employeesFromDb = repositoryManager.Employee.GetEmployees(companyId, trackChanges: false);
+            var employeesFromDb = repositoryManager.Employee.GetEmployeesAsync(companyId, trackChanges: false);
             var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employeesFromDb);
             return Ok(employeesDto);
         }
 
         [HttpGet("{id}", Name = "GetEmployeeForCompany")]
-        public IActionResult GetEmployeeForCompany(Guid companyId, Guid id)
+        public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid id)
         {
-            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+            var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges: false);
 
             if (company == null)
             {
@@ -49,7 +49,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var employeeDb = repositoryManager.Employee.GetEmployee(companyId, id, trackChanges: false);
+            var employeeDb = repositoryManager.Employee.GetEmployeeAsync(companyId, id, trackChanges: false);
 
             if (employeeDb == null)
             {
@@ -63,7 +63,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employee)
+        public async Task<IActionResult> CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employee)
         {
             if (employee == null)
             {
@@ -71,7 +71,13 @@ namespace WebApplication1.Controllers
                 return BadRequest("EmployeeForCreationDto object is null");
             }
 
-            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+            if (!ModelState.IsValid)
+            {
+                loggerManager.LogError("Invalid model state for the EmployeeForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
+
+            var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges: false);
 
             if (company == null)
             {
@@ -81,7 +87,7 @@ namespace WebApplication1.Controllers
 
             var employeeEntity = mapper.Map<Employee>(employee);
             repositoryManager.Employee.CreateEmployeeForCompany(companyId, employeeEntity);
-            repositoryManager.Save();
+            await repositoryManager.SaveAsync();
 
             var employeeToReturn = mapper.Map<EmployeeDto>(employeeEntity);
 
@@ -93,9 +99,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteEmloyeeForCompany(Guid companyId, Guid id)
+        public async Task<IActionResult> DeleteEmloyeeForCompany(Guid companyId, Guid id)
         {
-            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+            var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges: false);
 
             if (company == null)
             {
@@ -103,7 +109,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var employeeForComapny = repositoryManager.Employee.GetEmployee(companyId, id, trackChanges: false);
+            var employeeForComapny = await repositoryManager.Employee.GetEmployeeAsync(companyId, id, trackChanges: false);
 
             if (employeeForComapny == null)
             {
@@ -112,12 +118,12 @@ namespace WebApplication1.Controllers
             }
 
             repositoryManager.Employee.DeleteEmployee(employeeForComapny);
-            repositoryManager.Save();
+            await repositoryManager.SaveAsync();
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
+        public async Task<IActionResult> UpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] EmployeeForUpdateDto employee)
         {
             if (employee == null)
             {
@@ -125,7 +131,13 @@ namespace WebApplication1.Controllers
                 return BadRequest("EmployeeForUpdateDto object is null");
             }
 
-            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+            if (!ModelState.IsValid)
+            {
+                loggerManager.LogError("Invalid model state for the EmployeeForUpdateDto object");
+                return UnprocessableEntity(ModelState);
+            }
+
+            var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges: false);
 
             if (company == null)
             {
@@ -133,7 +145,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var employeeEntity = repositoryManager.Employee.GetEmployee(companyId, id, trackChanges: true);
+            var employeeEntity = await repositoryManager.Employee.GetEmployeeAsync(companyId, id, trackChanges: true);
 
             if (employeeEntity == null)
             {
@@ -142,12 +154,12 @@ namespace WebApplication1.Controllers
             }
 
             mapper.Map(employee, employeeEntity);
-            repositoryManager.Save();
+            await repositoryManager.SaveAsync();
             return NoContent();
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PartiallyUpdateEmployeeForCompany(
+        public async Task<IActionResult> PartiallyUpdateEmployeeForCompany(
             Guid companyId,
             Guid id,
             [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
@@ -159,7 +171,7 @@ namespace WebApplication1.Controllers
                 return BadRequest("patchDoc object is null");
             }
 
-            var company = repositoryManager.Company.GetCompany(companyId, trackChanges: false);
+            var company = await repositoryManager.Company.GetCompanyAsync(companyId, trackChanges: false);
 
             if (company == null)
             {
@@ -167,7 +179,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var employeeEntity = repositoryManager.Employee.GetEmployee(companyId, id, trackChanges: true);
+            var employeeEntity = await repositoryManager.Employee.GetEmployeeAsync(companyId, id, trackChanges: true);
 
             if (employeeEntity == null)
             {
@@ -178,9 +190,16 @@ namespace WebApplication1.Controllers
             var employeeToPatch = mapper.Map<EmployeeForUpdateDto>(employeeEntity);
 
             patchDoc.ApplyTo(employeeToPatch);
-            mapper.Map(employeeToPatch, employeeEntity);
+            TryValidateModel(employeeToPatch);
 
-            repositoryManager.Save();
+            if (!ModelState.IsValid)
+            {
+                loggerManager.LogError("Invalid model state for the patch document");
+                return UnprocessableEntity(ModelState);
+            }
+
+            mapper.Map(employeeToPatch, employeeEntity);
+            await repositoryManager.SaveAsync();
 
             return NoContent();
         }

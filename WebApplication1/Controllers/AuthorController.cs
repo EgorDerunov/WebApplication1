@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities.DataTransferObjects;
+using Entities.DataTransferObjects.Author;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.ModelBinders;
@@ -22,17 +22,17 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAuthors()
+        public async Task<IActionResult> GetAuthors()
         {
-            var authors = _repository.Author.GetAllAuthors(trackChanges: false);
+            var authors = await _repository.Author.GetAllAuthorsAsync(trackChanges: false);
             var authorsDto = _mapper.Map<IEnumerable<AuthorDto>>(authors);
             return Ok(authorsDto);
         }
 
         [HttpGet("{id}", Name = "AuthorById")]
-        public IActionResult GetAuthor(Guid id)
+        public async Task<IActionResult> GetAuthor(Guid id)
         {
-            var author = _repository.Author.GetAuthor(id, trackChanges: false);
+            var author = await _repository.Author.GetAuthorAsync(id, trackChanges: false);
             if (author == null)
             {
                 _logger.LogInfo($"Author with id: {id} doesn't exist in the database.");
@@ -46,7 +46,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet("collection/{ids}", Name = "AuthorCollection")]
-        public IActionResult GetAuthorCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
+        public async Task<IActionResult> GetAuthorCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
             if (ids == null)
             {
@@ -54,7 +54,7 @@ namespace WebApplication1.Controllers
                 return BadRequest("Parameter ids is null");
             }
 
-            var authorEntityes = _repository.Author.GetByIds(ids, trackChanges: false);
+            var authorEntityes = await _repository.Author.GetByIdsAsync(ids, trackChanges: false);
 
             if (ids.Count() != authorEntityes.Count())
             {
@@ -68,7 +68,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateAuthor([FromBody] AuthorForCreationDto author)
+        public async Task<IActionResult> CreateAuthor([FromBody] AuthorForCreationDto author)
         {
             if (author == null)
             {
@@ -76,9 +76,15 @@ namespace WebApplication1.Controllers
                 return BadRequest("AuthorForCreationDto object is null");
             }
 
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the AuthorForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
+
             var authorEntry = _mapper.Map<Author>(author);
             _repository.Author.CreateAuthor(authorEntry);
-            _repository.Save();
+            await _repository.SaveAsync();
 
             var authorToReturn = _mapper.Map<AuthorDto>(authorEntry);
 
@@ -86,12 +92,18 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("collection")]
-        public IActionResult CreateAuthorCollection([FromBody] IEnumerable<AuthorForCreationDto> authorCollection)
+        public async Task<IActionResult> CreateAuthorCollection([FromBody] IEnumerable<AuthorForCreationDto> authorCollection)
         {
             if (authorCollection == null)
             {
                 _logger.LogError("Author collection sent from client is null.");
                 return BadRequest("Author collection is null");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the author collection object");
+                return UnprocessableEntity(ModelState);
             }
 
             var authorEntities = _mapper.Map<IEnumerable<Author>>(authorCollection);
@@ -101,7 +113,7 @@ namespace WebApplication1.Controllers
                 _repository.Author.CreateAuthor(author);
             }
 
-            _repository.Save();
+            await _repository.SaveAsync();
 
             var authorCollectionToReturn = _mapper.Map<IEnumerable<AuthorDto>>(authorEntities);
             var ids = string.Join(",", authorCollectionToReturn.Select(c => c.Id));
@@ -110,9 +122,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteAuthor(Guid id)
+        public async Task<IActionResult> DeleteAuthor(Guid id)
         {
-            var author = _repository.Author.GetAuthor(id, trackChanges: false);
+            var author = await _repository.Author.GetAuthorAsync(id, trackChanges: false);
 
             if (author == null)
             {
@@ -121,12 +133,12 @@ namespace WebApplication1.Controllers
             }
 
             _repository.Author.DeleteAuthor(author);
-            _repository.Save();
+            await _repository.SaveAsync();
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateAuthor(Guid id, [FromBody] AuthorForUpdateDto author)
+        public async Task<IActionResult> UpdateAuthor(Guid id, [FromBody] AuthorForUpdateDto author)
         {
             if (author == null)
             {
@@ -134,7 +146,13 @@ namespace WebApplication1.Controllers
                 return BadRequest("AuthorForUpdateDto object is null");
             }
 
-            var authorEntity = _repository.Author.GetAuthor(id, trackChanges: true);
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the AuthorForUpdateDto object");
+                return UnprocessableEntity(ModelState);
+            }
+
+            var authorEntity = await _repository.Author.GetAuthorAsync(id, trackChanges: true);
 
             if (authorEntity == null)
             {
@@ -143,7 +161,7 @@ namespace WebApplication1.Controllers
             }
 
             _mapper.Map(author, authorEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
 
             return NoContent();
         }

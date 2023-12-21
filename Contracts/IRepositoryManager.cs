@@ -6,6 +6,6 @@
         IEmployeeRepository Employee { get; }
         IAuthorRepository Author { get; }
         IBookRepository Book { get; }
-        void Save();
+        Task SaveAsync();
     }
 }

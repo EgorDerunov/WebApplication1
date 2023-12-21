@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.DataTransferObjects
+namespace Entities.DataTransferObjects.Book
 {
-    public class BookForCreationDto
+    public class BookForManipulation
     {
         public string? Name { get; set; }
         public int YearIssue { get; set; }

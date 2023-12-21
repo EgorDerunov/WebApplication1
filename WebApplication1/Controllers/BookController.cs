@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities.DataTransferObjects;
+using Entities.DataTransferObjects.Book;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -24,9 +24,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetBooksForAuthor(Guid authorId)
+        public async Task<IActionResult> GetBooksForAuthor(Guid authorId)
         {
-            var author = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+            var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
 
             if (author == null)
             {
@@ -34,15 +34,15 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var booksFromDb = repositoryManager.Book.GetBooks(authorId, trackChanges: false);
+            var booksFromDb = repositoryManager.Book.GetBooksAsync(authorId, trackChanges: false);
             var booksDto = mapper.Map<IEnumerable<BookDto>>(booksFromDb);
             return Ok(booksDto);
         }
 
         [HttpGet("{id}", Name = "GeBookForAuthor")]
-        public IActionResult GetBookForAuthor(Guid authorId, Guid id)
+        public async Task<IActionResult> GetBookForAuthor(Guid authorId, Guid id)
         {
-            var author = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+            var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
 
             if (author == null)
             {
@@ -50,7 +50,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var bookDb = repositoryManager.Book.GetBook(authorId, id, trackChanges: false);
+            var bookDb = repositoryManager.Book.GetBookAsync(authorId, id, trackChanges: false);
 
             if (bookDb == null)
             {
@@ -64,7 +64,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateBookForAuthor(Guid authorId, [FromBody] BookForCreationDto book)
+        public async Task<IActionResult> CreateBookForAuthor(Guid authorId, [FromBody] BookForCreationDto book)
         {
             if (book == null)
             {
@@ -72,7 +72,13 @@ namespace WebApplication1.Controllers
                 return BadRequest("BookForCreationDto object is null");
             }
 
-            var autohr = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+            if (!ModelState.IsValid)
+            {
+                loggerManager.LogError("Invalid model state for the BookForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
+
+            var autohr = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
 
             if (autohr == null)
             {
@@ -82,7 +88,7 @@ namespace WebApplication1.Controllers
 
             var bookEntity = mapper.Map<Book>(book);
             repositoryManager.Book.CreateBookForAuthor(authorId, bookEntity);
-            repositoryManager.Save();
+            await repositoryManager.SaveAsync();
 
             var bookToReturn = mapper.Map<BookDto>(bookEntity);
 
@@ -94,9 +100,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteBookForAuthor(Guid authorId, Guid id)
+        public async Task<IActionResult> DeleteBookForAuthor(Guid authorId, Guid id)
         {
-            var author = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+            var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
 
             if (author == null)
             {
@@ -104,7 +110,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var bookForAuthor = repositoryManager.Book.GetBook(authorId, id, trackChanges: false);
+            var bookForAuthor = await repositoryManager.Book.GetBookAsync(authorId, id, trackChanges: false);
 
             if (bookForAuthor == null)
             {
@@ -113,12 +119,12 @@ namespace WebApplication1.Controllers
             }
 
             repositoryManager.Book.DeleteBook(bookForAuthor);
-            repositoryManager.Save();
+            await repositoryManager.SaveAsync();
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateBookForAuthor(Guid authorId, Guid id, [FromBody] BookForUpdateDto book)
+        public async Task<IActionResult> UpdateBookForAuthor(Guid authorId, Guid id, [FromBody] BookForUpdateDto book)
         {
             if (book == null)
             {
@@ -126,7 +132,13 @@ namespace WebApplication1.Controllers
                 return BadRequest("BookForUpdateDto object is null");
             }
 
-            var author = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+            if (!ModelState.IsValid)
+            {
+                loggerManager.LogError("Invalid model state for the BookForUpdateDto object");
+                return UnprocessableEntity(ModelState);
+            }
+
+            var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
 
             if (author == null)
             {
@@ -134,7 +146,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var bookEntity = repositoryManager.Book.GetBook(authorId, id, trackChanges: true);
+            var bookEntity = await repositoryManager.Book.GetBookAsync(authorId, id, trackChanges: true);
 
             if (bookEntity == null)
             {
@@ -143,12 +155,12 @@ namespace WebApplication1.Controllers
             }
 
             mapper.Map(book, bookEntity);
-            repositoryManager.Save();
+            await repositoryManager.SaveAsync();
             return NoContent();
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PartiallyUpdateBookForAuthor(
+        public async Task<IActionResult> PartiallyUpdateBookForAuthor(
             Guid authorId,
             Guid id,
             [FromBody] JsonPatchDocument<BookForUpdateDto> patchDoc)
@@ -160,7 +172,7 @@ namespace WebApplication1.Controllers
                 return BadRequest("patchDoc object is null");
             }
 
-            var author = repositoryManager.Author.GetAuthor(authorId, trackChanges: false);
+            var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
 
             if (author == null)
             {
@@ -168,7 +180,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var bookEntity = repositoryManager.Book.GetBook(authorId, id, trackChanges: true);
+            var bookEntity = await repositoryManager.Book.GetBookAsync(authorId, id, trackChanges: true);
 
             if (bookEntity == null)
             {
@@ -179,9 +191,17 @@ namespace WebApplication1.Controllers
             var bookToPatch = mapper.Map<BookForUpdateDto>(bookEntity);
 
             patchDoc.ApplyTo(bookToPatch);
+            TryValidateModel(bookToPatch);
+
+            if (!ModelState.IsValid)
+            {
+                loggerManager.LogError("Invalid model state for the patch document");
+                return UnprocessableEntity(ModelState);
+            }
+
             mapper.Map(bookToPatch, bookEntity);
 
-            repositoryManager.Save();
+            await repositoryManager.SaveAsync();
 
             return NoContent();
         }

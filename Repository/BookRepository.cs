@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.Design;
 
 namespace Repository
@@ -27,16 +28,16 @@ namespace Repository
             Delete(book);
         }
 
-        public Book GetBook(Guid authorId, Guid id, bool trackChanges)
+        public async Task<Book> GetBookAsync(Guid authorId, Guid id, bool trackChanges)
         {
-            return FindByCondition(
+            return await FindByCondition(
                 e => e.AuthorId.Equals(authorId) && e.Id.Equals(id), trackChanges)
-                .SingleOrDefault();
+                .SingleOrDefaultAsync();
         }
 
-        public IEnumerable<Book> GetBooks(Guid authorId, bool trackChanges)
+        public async Task<IEnumerable<Book>> GetBooksAsync(Guid authorId, bool trackChanges)
         {
-            return FindByCondition(e => e.AuthorId.Equals(authorId), trackChanges).OrderBy(e => e.Name);
+            return await FindByCondition(e => e.AuthorId.Equals(authorId), trackChanges).OrderBy(e => e.Name).ToListAsync();
         }
     }
 }

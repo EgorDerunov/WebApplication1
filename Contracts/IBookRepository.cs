@@ -6,9 +6,9 @@ namespace Contracts
     {
         public void BookMethod();
 
-        IEnumerable<Book> GetBooks(Guid authorId, bool trackChanges);
+        Task<IEnumerable<Book>> GetBooksAsync(Guid authorId, bool trackChanges);
 
-        Book GetBook(Guid authorId, Guid id, bool trackChanges);
+        Task<Book> GetBookAsync(Guid authorId, Guid id, bool trackChanges);
 
         void CreateBookForAuthor(Guid authorId, Book book);
 
