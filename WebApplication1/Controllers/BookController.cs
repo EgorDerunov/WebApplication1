@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects.Book;
+using Entities.DataTransferObjects.Employee;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.ComponentModel.Design;
+using WebApplication1.ActionFilter;
 
 namespace WebApplication1.Controllers
 {
@@ -24,8 +29,13 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBooksForAuthor(Guid authorId)
+        public async Task<IActionResult> GetBooksForAuthor(Guid authorId, [FromQuery] BookParameters bookParametrs)
         {
+            if (!bookParametrs.ValidYearRange)
+            {
+                return BadRequest("Max year can't be less than min year.");
+            }
+
             var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
 
             if (author == null)
@@ -34,7 +44,10 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var booksFromDb = repositoryManager.Book.GetBooksAsync(authorId, trackChanges: false);
+            var booksFromDb = await repositoryManager.Book.GetBooksAsync(authorId, bookParametrs, trackChanges: false);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(booksFromDb.MetaData));
+
             var booksDto = mapper.Map<IEnumerable<BookDto>>(booksFromDb);
             return Ok(booksDto);
         }
@@ -64,28 +77,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateBookForAuthor(Guid authorId, [FromBody] BookForCreationDto book)
         {
-            if (book == null)
-            {
-                loggerManager.LogError("BookForCreationDto object sent from client is null.");
-                return BadRequest("BookForCreationDto object is null");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                loggerManager.LogError("Invalid model state for the BookForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
-            var autohr = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
-
-            if (autohr == null)
-            {
-                loggerManager.LogInfo($"Author with id: {authorId} doesn't exist in the database.");
-                return NotFound();
-            }
-
             var bookEntity = mapper.Map<Book>(book);
             repositoryManager.Book.CreateBookForAuthor(authorId, bookEntity);
             await repositoryManager.SaveAsync();
@@ -100,23 +94,10 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateBookForAuthorExistsAttribute))]
         public async Task<IActionResult> DeleteBookForAuthor(Guid authorId, Guid id)
         {
-            var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
-
-            if (author == null)
-            {
-                loggerManager.LogInfo("$\"Author with id: {authorId} doesn't exist in the\r\ndatabase.\"");
-                return NotFound();
-            }
-
-            var bookForAuthor = await repositoryManager.Book.GetBookAsync(authorId, id, trackChanges: false);
-
-            if (bookForAuthor == null)
-            {
-                loggerManager.LogInfo($"Book with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var bookForAuthor = HttpContext.Items["book"] as Book;
 
             repositoryManager.Book.DeleteBook(bookForAuthor);
             await repositoryManager.SaveAsync();
@@ -124,35 +105,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateBookForAuthorExistsAttribute))]
         public async Task<IActionResult> UpdateBookForAuthor(Guid authorId, Guid id, [FromBody] BookForUpdateDto book)
         {
-            if (book == null)
-            {
-                loggerManager.LogError("BookForUpdateDto object sent from client is null.");
-                return BadRequest("BookForUpdateDto object is null");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                loggerManager.LogError("Invalid model state for the BookForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
-            var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
-
-            if (author == null)
-            {
-                loggerManager.LogInfo($"Author with id: {authorId} doesn't exist in the database.");
-                return NotFound();
-            }
-
-            var bookEntity = await repositoryManager.Book.GetBookAsync(authorId, id, trackChanges: true);
-
-            if (bookEntity == null)
-            {
-                loggerManager.LogInfo($"Book with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var bookEntity = HttpContext.Items["book"] as Book;
 
             mapper.Map(book, bookEntity);
             await repositoryManager.SaveAsync();
@@ -160,6 +117,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPatch("{id}")]
+        [ServiceFilter(typeof(ValidateBookForAuthorExistsAttribute))]
         public async Task<IActionResult> PartiallyUpdateBookForAuthor(
             Guid authorId,
             Guid id,
@@ -172,25 +130,9 @@ namespace WebApplication1.Controllers
                 return BadRequest("patchDoc object is null");
             }
 
-            var author = await repositoryManager.Author.GetAuthorAsync(authorId, trackChanges: false);
-
-            if (author == null)
-            {
-                loggerManager.LogInfo($"Author with id: {authorId} doesn't exist in the database.");
-                return NotFound();
-            }
-
             var bookEntity = await repositoryManager.Book.GetBookAsync(authorId, id, trackChanges: true);
-
-            if (bookEntity == null)
-            {
-                loggerManager.LogInfo($"Book with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
-
             var bookToPatch = mapper.Map<BookForUpdateDto>(bookEntity);
 
-            patchDoc.ApplyTo(bookToPatch);
             TryValidateModel(bookToPatch);
 
             if (!ModelState.IsValid)

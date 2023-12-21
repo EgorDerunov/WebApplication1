@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.Design;
 
@@ -35,9 +36,16 @@ namespace Repository
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAsync(Guid authorId, bool trackChanges)
+        public async Task<PagedList<Book>> GetBooksAsync(Guid authorId, BookParameters bookParameters, bool trackChanges)
         {
-            return await FindByCondition(e => e.AuthorId.Equals(authorId), trackChanges).OrderBy(e => e.Name).ToListAsync();
+            var books = await FindByCondition(e =>
+                e.AuthorId.Equals(authorId) &&
+                (e.YearIssue >= bookParameters.MinYear &&
+                e.YearIssue <= bookParameters.MaxYear), trackChanges)
+                    .OrderBy(e => e.Name)
+                    .ToListAsync();
+
+            return PagedList<Book>.ToPagedList(books, bookParameters.PageNumber, bookParameters.PageSize);
         }
     }
 }

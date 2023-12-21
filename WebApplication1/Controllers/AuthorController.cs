@@ -3,6 +3,7 @@ using Contracts;
 using Entities.DataTransferObjects.Author;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.ActionFilter;
 using WebApplication1.ModelBinders;
 
 namespace WebApplication1.Controllers
@@ -68,20 +69,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateAuthor([FromBody] AuthorForCreationDto author)
         {
-            if (author == null)
-            {
-                _logger.LogError("AuthorForCreationDto object sent from client is null.");
-                return BadRequest("AuthorForCreationDto object is null");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the AuthorForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
             var authorEntry = _mapper.Map<Author>(author);
             _repository.Author.CreateAuthor(authorEntry);
             await _repository.SaveAsync();
@@ -92,20 +82,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("collection")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateAuthorCollection([FromBody] IEnumerable<AuthorForCreationDto> authorCollection)
         {
-            if (authorCollection == null)
-            {
-                _logger.LogError("Author collection sent from client is null.");
-                return BadRequest("Author collection is null");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the author collection object");
-                return UnprocessableEntity(ModelState);
-            }
-
             var authorEntities = _mapper.Map<IEnumerable<Author>>(authorCollection);
 
             foreach (var author in authorEntities)
@@ -122,15 +101,10 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateAuthorExistsAttribute))]
         public async Task<IActionResult> DeleteAuthor(Guid id)
         {
-            var author = await _repository.Author.GetAuthorAsync(id, trackChanges: false);
-
-            if (author == null)
-            {
-                _logger.LogInfo($"Author with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var author = HttpContext.Items["author"] as Author;
 
             _repository.Author.DeleteAuthor(author);
             await _repository.SaveAsync();
@@ -138,27 +112,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateAuthorExistsAttribute))]
         public async Task<IActionResult> UpdateAuthor(Guid id, [FromBody] AuthorForUpdateDto author)
         {
-            if (author == null)
-            {
-                _logger.LogError("AuthorForUpdateDto object sent from client is null.");
-                return BadRequest("AuthorForUpdateDto object is null");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the AuthorForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
-            var authorEntity = await _repository.Author.GetAuthorAsync(id, trackChanges: true);
-
-            if (authorEntity == null)
-            {
-                _logger.LogInfo($"Author with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var authorEntity = HttpContext.Items["author"] as Author;
 
             _mapper.Map(author, authorEntity);
             await _repository.SaveAsync();

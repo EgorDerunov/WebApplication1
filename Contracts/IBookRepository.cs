@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Entities.RequestFeatures;
 
 namespace Contracts
 {
@@ -6,7 +7,7 @@ namespace Contracts
     {
         public void BookMethod();
 
-        Task<IEnumerable<Book>> GetBooksAsync(Guid authorId, bool trackChanges);
+        Task<PagedList<Book>> GetBooksAsync(Guid authorId, BookParameters employeeParametrs, bool trackChanges);
 
         Task<Book> GetBookAsync(Guid authorId, Guid id, bool trackChanges);
 
