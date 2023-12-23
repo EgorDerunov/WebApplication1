@@ -8,6 +8,7 @@ using WebApplication1.ModelBinders;
 
 namespace WebApplication1.Controllers
 {
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorController : ControllerBase

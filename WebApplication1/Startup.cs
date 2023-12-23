@@ -32,6 +32,7 @@ public class Startup
         services.ConfigureCors();
         services.ConfigureIISIntegration();
         services.ConfigureLoggerService();
+        services.ConfigureVersioning();
 
         services.ConfigureSqlContext(Configuration);
         services.ConfigureRepositoryManager();

@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities;
 using LoggerService;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repository;
@@ -43,6 +45,17 @@ namespace WebApplication1.Extensions
         public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder)
         {
             return builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatterCompany()));
+        }
+
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            });
         }
     }
 }
