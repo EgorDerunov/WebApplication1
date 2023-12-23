@@ -37,6 +37,9 @@ public class Startup
         services.ConfigureSqlContext(Configuration);
         services.ConfigureRepositoryManager();
 
+        services.AddAuthentication();
+        services.ConfigureIdentity();
+
         services.AddScoped<ValidationFilterAttribute>();
         services.AddScoped<ValidateCompanyExistsAttribute>();
         services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
@@ -77,6 +80,7 @@ public class Startup
 
         app.UseRouting();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
