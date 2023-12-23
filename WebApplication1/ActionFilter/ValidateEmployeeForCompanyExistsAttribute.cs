@@ -30,7 +30,7 @@ namespace WebApplication1.ActionFilter
             }
 
             var id = (Guid)context.ActionArguments["id"];
-            var employee = await _repository.Employee.GetEmployeesAsync(companyId, id, trackChanges);
+            var employee = await _repository.Employee.GetEmployeeAsync(companyId, id, trackChanges);
 
             if (employee == null)
             {

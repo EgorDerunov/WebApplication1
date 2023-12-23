@@ -11,12 +11,17 @@
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "Entities": "1.0.0",
           "LoggerService": "1.0.0",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.25",
           "Microsoft.AspNetCore.JsonPatch": "7.0.13",
+          "Microsoft.AspNetCore.Mvc.Versioning": "5.1.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.12",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.12",
           "NLog.Extensions.Logging": "5.3.4",
           "Repository": "1.0.0",
-          "Swashbuckle.AspNetCore": "6.5.0"
+          "Swashbuckle.AspNetCore": "6.5.0",
+          "Swashbuckle.AspNetCore.Swagger": "6.5.0",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.5.0",
+          "Swashbuckle.AspNetCore.SwaggerUI": "6.5.0"
         },
         "runtime": {
           "WebApplication1.dll": {}
@@ -87,6 +92,17 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Authentication.JwtBearer/6.0.25": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.24.0"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
+            "assemblyVersion": "6.0.25.0",
+            "fileVersion": "6.0.2523.52315"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Cryptography.Internal/6.0.23": {
         "runtime": {
           "lib/net6.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {
@@ -127,6 +143,14 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.JsonPatch.dll": {
             "assemblyVersion": "7.0.13.0",
             "fileVersion": "7.0.1323.52007"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Mvc.Versioning/5.1.0": {
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {
+            "assemblyVersion": "5.1.0.0",
+            "fileVersion": "5.1.8270.41513"
           }
         }
       },
@@ -668,6 +692,14 @@
           }
         }
       },
+      "System.Linq.Dynamic/1.0.8": {
+        "runtime": {
+          "lib/net40/System.Linq.Dynamic.dll": {
+            "assemblyVersion": "1.0.6132.35681",
+            "fileVersion": "1.0.6132.35681"
+          }
+        }
+      },
       "System.Linq.Dynamic.Core/1.3.5": {
         "runtime": {
           "lib/net6.0/System.Linq.Dynamic.Core.dll": {
@@ -835,6 +867,7 @@
           "Microsoft.IdentityModel.Tokens": "7.0.2",
           "NLog.Extensions.Logging": "5.3.4",
           "System.IdentityModel.Tokens.Jwt": "7.0.2",
+          "System.Linq.Dynamic": "1.0.8",
           "System.Linq.Dynamic.Core": "1.3.5"
         },
         "runtime": {
@@ -884,6 +917,13 @@
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
     },
+    "Microsoft.AspNetCore.Authentication.JwtBearer/6.0.25": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bc7KZZRAHLpeuznhuQWGHW7kNDRvKsUY7fPq9ftOBLR8DUtyTF1amgHxbHKg9sveTGwrJPiBf4b42pVTYlRccg==",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/6.0.25",
+      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.6.0.25.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Cryptography.Internal/6.0.23": {
       "type": "package",
       "serviceable": true,
@@ -911,6 +951,13 @@
       "sha512": "sha512-oam3X5j6/6/H4m11MddKNFimiCuwQfYYZR5WG05/knDpb1FJ778Oe8wthHiohJn0Rimq3qdDOlCjPOhHgrriaA==",
       "path": "microsoft.aspnetcore.jsonpatch/7.0.13",
       "hashPath": "microsoft.aspnetcore.jsonpatch.7.0.13.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Mvc.Versioning/5.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UX8w9BlCiZpr6Ox4YAve1w0CkI1CAovukGNzKd7v0+5pZc8lzuG5tRovucr1RWIKHs0E/Yx8563CN7KzaB3bpw==",
+      "path": "microsoft.aspnetcore.mvc.versioning/5.1.0",
+      "hashPath": "microsoft.aspnetcore.mvc.versioning.5.1.0.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
       "type": "package",
@@ -1254,6 +1301,13 @@
       "sha512": "sha512-szV62kSg47xg7ZL8wbpR90j+han0YG+rnK4S30xPEkMQHRkQTz30mir2xMkEclaiLNVuKozaNne+sptoSwelGA==",
       "path": "system.identitymodel.tokens.jwt/7.0.2",
       "hashPath": "system.identitymodel.tokens.jwt.7.0.2.nupkg.sha512"
+    },
+    "System.Linq.Dynamic/1.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nh+3I/wcZcyQ4p8DKMhy/PH4sGKONrrGlx+eqpqrRTDHe6gyDTF5nK0AIXitDuzvtNTOkvpJWvPd0xdzEmlQjA==",
+      "path": "system.linq.dynamic/1.0.8",
+      "hashPath": "system.linq.dynamic.1.0.8.nupkg.sha512"
     },
     "System.Linq.Dynamic.Core/1.3.5": {
       "type": "package",

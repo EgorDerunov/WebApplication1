@@ -13,6 +13,7 @@
           "Microsoft.IdentityModel.Tokens": "7.0.2",
           "NLog.Extensions.Logging": "5.3.4",
           "System.IdentityModel.Tokens.Jwt": "7.0.2",
+          "System.Linq.Dynamic": "1.0.8",
           "System.Linq.Dynamic.Core": "1.3.5"
         },
         "runtime": {
@@ -295,6 +296,14 @@
           }
         }
       },
+      "System.Linq.Dynamic/1.0.8": {
+        "runtime": {
+          "lib/net40/System.Linq.Dynamic.dll": {
+            "assemblyVersion": "1.0.6132.35681",
+            "fileVersion": "1.0.6132.35681"
+          }
+        }
+      },
       "System.Linq.Dynamic.Core/1.3.5": {
         "runtime": {
           "lib/net6.0/System.Linq.Dynamic.Core.dll": {
@@ -511,6 +520,13 @@
       "sha512": "sha512-szV62kSg47xg7ZL8wbpR90j+han0YG+rnK4S30xPEkMQHRkQTz30mir2xMkEclaiLNVuKozaNne+sptoSwelGA==",
       "path": "system.identitymodel.tokens.jwt/7.0.2",
       "hashPath": "system.identitymodel.tokens.jwt.7.0.2.nupkg.sha512"
+    },
+    "System.Linq.Dynamic/1.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nh+3I/wcZcyQ4p8DKMhy/PH4sGKONrrGlx+eqpqrRTDHe6gyDTF5nK0AIXitDuzvtNTOkvpJWvPd0xdzEmlQjA==",
+      "path": "system.linq.dynamic/1.0.8",
+      "hashPath": "system.linq.dynamic.1.0.8.nupkg.sha512"
     },
     "System.Linq.Dynamic.Core/1.3.5": {
       "type": "package",
